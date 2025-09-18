@@ -1,4 +1,11 @@
-import { View, StyleSheet, Alert, Text, FlatList } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  Text,
+  FlatList,
+  useWindowDimensions,
+} from "react-native";
 import Title from "../components/ui/Title";
 import { useState, useEffect } from "react";
 import NumberContainer from "../components/game/NumberContainer";
@@ -20,14 +27,10 @@ function generateRandomBetween(min, max, exclude) {
 let min = 1;
 let max = 100;
 
-export default function GameScreen({
-  pickedNumber,
-  setIsGameOver,
-  round,
-  setRound,
-}) {
+export default function GameScreen({ pickedNumber, setIsGameOver, setRound }) {
   const initialGuess = generateRandomBetween(1, 100, pickedNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
+  const { width, height } = useWindowDimensions();
 
   useEffect(() => {
     setRound([initialGuess]);
@@ -65,11 +68,15 @@ export default function GameScreen({
     setRound((prev) => [...prev, newNum]);
   }
 
+  // 📌 동적 크기 계산
+  const marginTopDistance = height < 400 ? 20 : 50; // 세로 길이가 짧으면 여백 줄임
+  const cardPadding = width < 380 ? 12 : 24; // 작은 기기에서는 padding 줄이기
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { marginTop: marginTopDistance }]}>
       <Title>Opponent's Guess</Title>
       <NumberContainer>{currentGuess}</NumberContainer>
-      <Card>
+      <Card style={{ padding: cardPadding }}>
         <Text>Higher or lower?</Text>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer}>
@@ -84,17 +91,6 @@ export default function GameScreen({
           </View>
         </View>
       </Card>
-      {/* 
-      <FlatList
-        data={round}
-        inverted
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.listItem}>
-            <Text style={styles.listText}>{item}</Text>
-          </View>
-        )}
-      /> */}
     </View>
   );
 }
@@ -105,27 +101,27 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: "center",
   },
-  listContainer: {
-    flex: 1,
-    padding: 16,
-  },
+  // listContainer: {
+  //   flex: 1,
+  //   padding: 16,
+  // },
   buttonsContainer: {
     flexDirection: "row",
   },
   buttonContainer: {
     flex: 1,
   },
-  listItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderColor: "#ccc",
-    borderWidth: 1,
-    padding: 12,
-    marginVertical: 8,
-    width: "80%",
-    borderRadius: 8,
-  },
-  listText: {
-    fontSize: 16,
-  },
+  // listItem: {
+  //   flexDirection: "row",
+  //   justifyContent: "space-between",
+  //   borderColor: "#ccc",
+  //   borderWidth: 1,
+  //   padding: 12,
+  //   marginVertical: 8,
+  //   width: "80%",
+  //   borderRadius: 8,
+  // },
+  // listText: {
+  //   fontSize: 16,
+  // },
 });

@@ -10,6 +10,7 @@ import GameOverScreen from "./screens/GameOverScreen";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync(); // 앱 시작 시 스플래시 유지
 
@@ -40,41 +41,44 @@ export default function App() {
   }
 
   return (
-    <LinearGradient
-      colors={[Colors.red500, Colors.red400, Colors.red300]}
-      style={styles.root}
-      start={{ x: 0, y: 0 }} // 시작점 (왼쪽 위)
-      end={{ x: 1, y: 1 }} // 끝점 (오른쪽 아래)
-    >
-      <ImageBackground
-        source={bgImg}
-        resizeMode="cover"
+    <>
+      <StatusBar style="light" />
+      <LinearGradient
+        colors={[Colors.red500, Colors.red400, Colors.red300]}
         style={styles.root}
-        imageStyle={styles.backgroundImage}
+        start={{ x: 0, y: 0 }} // 시작점 (왼쪽 위)
+        end={{ x: 1, y: 1 }} // 끝점 (오른쪽 아래)
       >
-        <SafeAreaView style={styles.root}>
-          {pickedNumber && !gameIsOver && (
-            <GameScreen
-              pickedNumber={pickedNumber}
-              setPickedNumber={setPickedNumber}
-              setIsGameOver={setIsGameOver}
-              round={round}
-              setRound={setRound}
-            />
-          )}
-          {!pickedNumber && !gameIsOver && (
-            <StartGameScreen setPickedNumber={setPickedNumber} />
-          )}
-          {gameIsOver && (
-            <GameOverScreen
-              pickedNumber={pickedNumber}
-              round={round}
-              handleNewGame={handleNewGame}
-            />
-          )}
-        </SafeAreaView>
-      </ImageBackground>
-    </LinearGradient>
+        <ImageBackground
+          source={bgImg}
+          resizeMode="cover"
+          style={styles.root}
+          imageStyle={styles.backgroundImage}
+        >
+          <SafeAreaView style={styles.root}>
+            {pickedNumber && !gameIsOver && (
+              <GameScreen
+                pickedNumber={pickedNumber}
+                setPickedNumber={setPickedNumber}
+                setIsGameOver={setIsGameOver}
+                round={round}
+                setRound={setRound}
+              />
+            )}
+            {!pickedNumber && !gameIsOver && (
+              <StartGameScreen setPickedNumber={setPickedNumber} />
+            )}
+            {gameIsOver && (
+              <GameOverScreen
+                pickedNumber={pickedNumber}
+                round={round}
+                handleNewGame={handleNewGame}
+              />
+            )}
+          </SafeAreaView>
+        </ImageBackground>
+      </LinearGradient>
+    </>
   );
 }
 
